@@ -12,6 +12,8 @@ const ProductSchema = new mongoose.Schema(
         comment: String,
       },
     ],
+
+    likes: [{ type: ObjectId }],
   },
   { timestamps: true }
 );

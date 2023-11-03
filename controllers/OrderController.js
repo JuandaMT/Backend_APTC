@@ -7,7 +7,7 @@ const OrderController = {
       const order = await Order.create({
         ...req.body,
         status: "pending",
-        deliveryDate: new Date().setDate(new Date().getDate() + 2),
+        deliveryDate: new Date().setDate(new Date().getDate()),
         userId: req.user._id, //guardamos como userId el _id del usuario que crea el pedido
       });
       await User.findByIdAndUpdate(req.user._id, { $push: { orderIds: order._id } })
