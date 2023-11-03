@@ -30,6 +30,20 @@ const OrderController = {
       console.error(error);
     }
   },
+  async like(req, res) {
+    try {
+      const product = await Product.findByIdAndUpdate(
+        req.params._id,
+        { $push: { likes: req.user._id } },
+        { new: true }
+      );
+      res.send(product);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ message: "There was a problem with your like" });
+    }
+  },
+
 };
 
 module.exports = OrderController;

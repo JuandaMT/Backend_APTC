@@ -9,10 +9,9 @@ const UserController = {
       const user = await User.create(req.body);
       res.status(201).send({ message: "Usuario registrado con éxito", user });
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
-
 
   async login(req, res) {
     /* NO SE SI FUNCIONA */
@@ -80,8 +79,8 @@ const UserController = {
           populate: {
             path: "productIds",
           },
-        });
-
+        })
+        .populate("wishList");
       res.send(user);
     } catch (error) {
       console.error(error);

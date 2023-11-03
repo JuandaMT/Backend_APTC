@@ -10,5 +10,6 @@ router.get('/name/:name',ProductController.getProductsByName);
 router.put('/id/:_id',authentication, isAdmin ,ProductController.update);
 router.delete('/id/:_id',authentication, isAdmin , ProductController.delete);
 router.put('/reviews/:_id', authentication, ProductController.insertComment);
+router.put('/likes/:_id', authentication, ProductController.like);
 
 module.exports = router;
