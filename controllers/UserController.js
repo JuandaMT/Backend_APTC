@@ -4,14 +4,15 @@ const { jwt_secret } = require("../config/keys.js");
 const bcrypt = require("bcrypt");
 
 const UserController = {
-  async register(req, res) {
+  async register(req, res, next) {
     try {
       const user = await User.create(req.body);
-      res.status(201).send({ message: "Usuario registrado con exito", user });
+      res.status(201).send({ message: "Usuario registrado con éxito", user });
     } catch (error) {
-      console.error(error);
+      next(error)
     }
   },
+
 
   async login(req, res) {
     /* NO SE SI FUNCIONA */
