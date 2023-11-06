@@ -6,7 +6,10 @@ const transporter = require("../config/nodemailer");
 
 const UserController = {
   async register(req, res, next) {
+    req.body.role = "user";
     try {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      req.body.password = hashedPassword;
       const user = await User.create(req.body);
       res.status(201).send({ message: "Usuario registrado con éxito", user });
     } catch (error) {
@@ -15,13 +18,10 @@ const UserController = {
   },
 
   async login(req, res) {
-    /* NO SE SI FUNCIONA */
-    /* ESTE CÓDIGO DEBERIA DE COMPROBAR QUE EL USUARIO Y CONTRASEÑA COINCIDE */
-    /*   try {
+    try {
       const user = await User.findOne({ email: req.body.email });
 
       if (user) {
-        // Comprobar la contraseña proporcionada por el usuario con la contraseña almacenada
         const isPasswordValid = await bcrypt.compare(
           req.body.password,
           user.password
@@ -34,30 +34,16 @@ const UserController = {
           await user.save();
           res.send({ message: "Bienvenid@ " + user.name, token });
         } else {
-          // Contraseña incorrecta
           res.status(401).send({ message: "Contraseña incorrecta" });
         }
       } else {
-        // Usuario no encontrado
         res.status(404).send({ message: "Usuario no encontrado" });
       }
     } catch (error) {
       console.error(error);
     }
-  }, */
-    try {
-      const user = await User.findOne({
-        email: req.body.email,
-      });
-      const token = jwt.sign({ _id: user._id }, jwt_secret);
-      if (user.tokens.length > 4) user.tokens.shift();
-      user.tokens.push(token);
-      await user.save();
-      res.send({ message: "Bienvenid@ " + user.name, token });
-    } catch (error) {
-      console.error(error);
-    }
   },
+
   async logout(req, res) {
     try {
       await User.findByIdAndUpdate(req.user._id, {
@@ -122,7 +108,6 @@ const UserController = {
       console.error(error);
     }
   },
-
 };
 
 module.exports = UserController;
