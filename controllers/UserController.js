@@ -20,7 +20,6 @@ const UserController = {
   async login(req, res) {
     try {
       const user = await User.findOne({ email: req.body.email });
-
       if (user) {
         const isPasswordValid = await bcrypt.compare(
           req.body.password,
@@ -32,7 +31,7 @@ const UserController = {
           if (user.tokens.length > 4) user.tokens.shift();
           user.tokens.push(token);
           await user.save();
-          res.send({ message: "Bienvenid@ " + user.name, token });
+          res.send({ message: "Bienvenid@ ", token, user });
         } else {
           res.status(401).send({ message: "Contraseña incorrecta" });
         }
@@ -41,6 +40,7 @@ const UserController = {
       }
     } catch (error) {
       console.error(error);
+      res.status(500).send({ message: "Error en el servidor" });
     }
   },
 
